@@ -26,23 +26,26 @@ library(jsonlite)
 Sys.setenv(SPOTIFY_CLIENT_ID = "YOURCLIENTID")
 Sys.setenv(SPOTIFY_CLIENT_SECRET = "YOURCLIENTSECRET")
 
-taylor <- get_artist_albums(id = "06HL4z0CvFAxyc27GXpf02")
+taylor <- get_artist_albums(id = "06HL4z0CvFAxyc27GXpf02", limit = 50)
+
+sort(unique(taylor$name))
 
 # I am removing duplicate/special editions of albums to keep this dataset simple
 taylor <- taylor %>%
   filter(
     name %in% c("The Life of a Showgirl",
                 "THE TORTURED POETS DEPARTMENT",
-                "1989 (Taylor's Version)",
-                "Speak Now (Taylor's Version)",
+                "1989",
+                "Speak Now",
                 "Midnights",
-                "Red (Taylor's Version)",
-                "Fearless (Taylor's Version)",
+                "Red",
+                "Fearless (Platinum Edition)",
                 "evermore",
                 "folklore",
                 "Lover",
                 "reputation",
-                "1989 (Deluxe)")
+                "1989",
+                "Taylor Swift (Deluxe Edition)")
   ) %>%
   as_tibble()
 
@@ -219,7 +222,7 @@ taylor_data
 
 get_tracklist <- function(artist_id) {
   # Get all of the album names from a particular artist
-  artist_albums <- get_artist_albums(id = artist_id)
+  artist_albums <- get_artist_albums(id = artist_id, include_groups = "album", limit = 50)
   
   message("Albums found.")
   
@@ -257,7 +260,7 @@ batch_requests <- function (tracks) {
   
   # This function batches a dataset into chunks of 40 tracks
   
-  request_range <- seq(0, 400, 40)
+  request_range <- seq(0, 520, 40)
   request_tracks <- list()
   
   for (i in 1:11) {
@@ -416,23 +419,21 @@ arctic_monkeys <- arctic_monkeys %>%
 
 # Data tidying
 
-unique(fleetwood_mac$album)
+sort(unique(fleetwood_mac$album))
 
 fleetwood_mac <- fleetwood_mac %>%
   filter(
-    !album %in% c("Live From The Record Plant (December 15, 1974)",
-                  "Mirage Tour '82 (Live)",
-                  "Rumours Live",
-                  "The Shape I'm In (Live 1972)",
-                  "Fleetwood Mac 1975 to 1987",
-                  "Before the Beginning - 1968-1970 Rare Live & Demo Sessions (Remastered)",
-                  "Tango In the Night (Deluxe Edition)",
-                  "Mirage (Deluxe Edition)",
-                  "Live (Deluxe Edition)",
-                  "50 Years - Don't Stop")
+    album %in% c("Rumours",
+                 "Tusk (Deluxe Edition)",
+                 "Mirage (Deluxe Edition)",
+                 "Tango In the Night (Deluxe Edition)",
+                 "Behind the Mask",
+                 "Time",
+                 "Say You Will"
+                 )
   )
 
-unique(arctic_monkeys$album)
+sort(unique(arctic_monkeys$album))
 
 arctic_monkeys <- arctic_monkeys %>%
   filter(
@@ -447,7 +448,6 @@ arctic_monkeys <- arctic_monkeys %>%
     )
   )
 
-taylor_data <- read_csv("artist_data/taylor_swift_2026.csv")
 
 # Update key and mode
 taylor_data <- taylor_data %>%
@@ -473,6 +473,19 @@ taylor_data <- taylor_data %>%
       mode == 0 ~ "Minor"
     )
   )
+
+# Tidy some Taylor Swift album selections
+unique(taylor_data$album)
+
+taylor_data <- taylor_data %>%
+  mutate(
+    album = case_when(
+      album == "Taylor Swift (Deluxe Edition)" ~ "Taylor Swift",
+      album == "Fearless (Platinum Edition)" ~ "Fearless",
+      TRUE ~ album
+    )
+  )
+
 
 fleetwood_mac <- fleetwood_mac %>%
   mutate(
