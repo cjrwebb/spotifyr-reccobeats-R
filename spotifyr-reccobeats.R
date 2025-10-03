@@ -412,13 +412,44 @@ fleetwood_mac <- fleetwood_mac %>%
 arctic_monkeys <- arctic_monkeys %>%
   select(-artists, -available_markets, -preview_url)
 
+
+unique(fleetwood_mac$album)
+
+fleetwood_mac <- fleetwood_mac %>%
+  filter(
+    !album %in% c("Live From The Record Plant (December 15, 1974)",
+                  "Mirage Tour '82 (Live)",
+                  "Rumours Live",
+                  "The Shape I'm In (Live 1972)",
+                  "Fleetwood Mac 1975 to 1987",
+                  "Before the Beginning - 1968-1970 Rare Live & Demo Sessions (Remastered)",
+                  "Tango In the Night (Deluxe Edition)",
+                  "Mirage (Deluxe Edition)",
+                  "Live (Deluxe Edition)",
+                  "50 Years - Don't Stop")
+  )
+
+unique(arctic_monkeys$album)
+
+arctic_monkeys <- arctic_monkeys %>%
+  filter(
+    album %in% c(
+      "The Car",
+      "Tranquility Base Hotel & Casino",
+      "AM",
+      "Suck It and See",
+      "Humbug",
+      "Favourite Worst Nightmare",
+      "Whatever People Say I Am, That's What I'm Not"
+    )
+  )
+
+
 if (dir.exists("artist_data") == FALSE) {
   dir.create("artist_data")
-  write_csv(taylor_data, "artist_data/taylor_swift_2026.csv")
   write_csv(fleetwood_mac, "artist_data/fleetwood_mac_2026.csv")
   write_csv(arctic_monkeys, "artist_data/arctic_monkeys_2026.csv")
 } else {
-  write_csv(taylor_data, "artist_data/taylor_swift_2026.csv")
   write_csv(fleetwood_mac, "artist_data/fleetwood_mac_2026.csv")
   write_csv(arctic_monkeys, "artist_data/arctic_monkeys_2026.csv")
 } 
