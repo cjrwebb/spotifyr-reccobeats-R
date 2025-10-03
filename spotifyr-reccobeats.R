@@ -403,6 +403,7 @@ frank_ocean <- get_recco_artist_track_features(artist_name = "Frank Ocean",
 # Data is not as comprehensive as the old Spotify API using spotifyr, but is fine.
 
 # Save datasets
+
 taylor_data <- taylor_data %>%
   select(-artists, -available_markets, -preview_url)
 
@@ -412,6 +413,8 @@ fleetwood_mac <- fleetwood_mac %>%
 arctic_monkeys <- arctic_monkeys %>%
   select(-artists, -available_markets, -preview_url)
 
+
+# Data tidying
 
 unique(fleetwood_mac$album)
 
@@ -444,12 +447,89 @@ arctic_monkeys <- arctic_monkeys %>%
     )
   )
 
+taylor_data <- read_csv("artist_data/taylor_swift_2026.csv")
+
+# Update key and mode
+taylor_data <- taylor_data %>%
+  mutate(
+    key = case_when(
+      is.na(key) ~ NA_character_,
+      key == 0 ~ "C",
+      key == 1 ~ "C#",
+      key == 2 ~ "D",
+      key == 3 ~ "D#",
+      key == 4 ~ "E",
+      key == 5 ~ "F",
+      key == 6 ~ "F#",
+      key == 7 ~ "G",
+      key == 8 ~ "G#",
+      key == 9 ~ "A",
+      key == 10 ~ "A#",
+      key == 11 ~ "B"
+    ),
+    mode = case_when(
+      is.na(mode) ~ NA_character_,
+      mode == 1 ~ "Major",
+      mode == 0 ~ "Minor"
+    )
+  )
+
+fleetwood_mac <- fleetwood_mac %>%
+  mutate(
+    key = case_when(
+      is.na(key) ~ NA_character_,
+      key == 0 ~ "C",
+      key == 1 ~ "C#",
+      key == 2 ~ "D",
+      key == 3 ~ "D#",
+      key == 4 ~ "E",
+      key == 5 ~ "F",
+      key == 6 ~ "F#",
+      key == 7 ~ "G",
+      key == 8 ~ "G#",
+      key == 9 ~ "A",
+      key == 10 ~ "A#",
+      key == 11 ~ "B"
+    ),
+    mode = case_when(
+      is.na(mode) ~ NA_character_,
+      mode == 1 ~ "Major",
+      mode == 0 ~ "Minor"
+    )
+  )
+
+arctic_monkeys <- arctic_monkeys %>%
+  mutate(
+    key = case_when(
+      is.na(key) ~ NA_character_,
+      key == 0 ~ "C",
+      key == 1 ~ "C#",
+      key == 2 ~ "D",
+      key == 3 ~ "D#",
+      key == 4 ~ "E",
+      key == 5 ~ "F",
+      key == 6 ~ "F#",
+      key == 7 ~ "G",
+      key == 8 ~ "G#",
+      key == 9 ~ "A",
+      key == 10 ~ "A#",
+      key == 11 ~ "B"
+    ),
+    mode = case_when(
+      is.na(mode) ~ NA_character_,
+      mode == 1 ~ "Major",
+      mode == 0 ~ "Minor"
+    )
+  )
+
 
 if (dir.exists("artist_data") == FALSE) {
   dir.create("artist_data")
+  write_csv(taylor_data, "artist_data/taylor_swift_2026.csv")
   write_csv(fleetwood_mac, "artist_data/fleetwood_mac_2026.csv")
   write_csv(arctic_monkeys, "artist_data/arctic_monkeys_2026.csv")
 } else {
+  write_csv(taylor_data, "artist_data/taylor_swift_2026.csv")
   write_csv(fleetwood_mac, "artist_data/fleetwood_mac_2026.csv")
   write_csv(arctic_monkeys, "artist_data/arctic_monkeys_2026.csv")
 } 
