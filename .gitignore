@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# spotify credentials
+spotify-credentials.txt
+.httr-oauth
+spotifyr-reccobeats-R.Rproj
